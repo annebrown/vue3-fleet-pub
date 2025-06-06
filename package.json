@@ -1,7 +1,7 @@
 {
-    "name": "@annebrown/vue3-fleet-pub",
+    "name": "@annebrown.ca/vue3-fleet-pub",
     "description": "Fleet-Wide, Public, Vue 3 component Library",
-    "version": "0.0.1",
+    "version": "0.0.11",
     "private": false,
     "type": "module",
     "main": "./dist/vue3-fleet-pub.cjs",
@@ -11,8 +11,9 @@
         ".": {
             "import": "./dist/vue3-fleet-pub.mjs",
             "require": "./dist/vue3-fleet-pub.cjs",
-            "types": "./dist/index.d.ts" 
-        }
+            "types": "./dist/index.d.ts"
+        },
+        "./dist/style.css": "./dist/style.css"
     },
 
     "files": [

@@ -1,8 +1,5 @@
 <template>
   <div>
-      <h3>
-        StarterTest Component
-      </h3>
-      <p>Testing npm module import</p>
+      <p> This is the Official 'StarterTest' Component Output</p><br/>
   </div>
 </template>

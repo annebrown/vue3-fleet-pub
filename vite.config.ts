@@ -1,36 +1,31 @@
-// vite.config.ts
-import { fileURLToPath, URL } from 'node:url'
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import dts from 'vite-plugin-dts'
+// /home/anne/devy/modules/vue3-fleet-pub/vite.config.ts
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import { resolve } from 'path';
+import dts from 'vite-plugin-dts';
 
 export default defineConfig({
   plugins: [
     vue(),
-    dts({ //
-      include: ['src/**/*.ts', 'src/**/*.vue']
-    })
+    dts({ insertTypesEntry: true })
   ],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-    }
-  },
   build: {
     lib: {
-      entry: fileURLToPath(new URL('./src/index.ts', import.meta.url)),
+      entry: resolve(__dirname, 'src/index.ts'),
       name: 'Vue3FleetPub',
-      fileName: (format) => `vue3-fleet-pub.${format}.js`
+      // THIS IS THE CRITICAL PART FOR FILENAMES
+      fileName: (format) => {
+        if (format === 'es') return 'vue3-fleet-pub.mjs'; // For ES Modules
+        if (format === 'cjs') return 'vue3-fleet-pub.cjs'; // For CommonJS
+        if (format === 'umd') return 'vue3-fleet-pub.umd.cjs'; // For UMD
+        return `vue3-fleet-pub.${format}.js`; // Fallback
+      },
     },
     rollupOptions: {
-      external: ['vue'], // Don't bundle with lib
+      external: ['vue'],
       output: {
-        // Global vars for viewport-visible externalized deps
-        globals: {
-          vue: 'Vue',
-        },
-        exports: 'named'
-      }
-    }
-  }
-})
+        globals: { vue: 'Vue' },
+      },
+    },
+  },
+});
