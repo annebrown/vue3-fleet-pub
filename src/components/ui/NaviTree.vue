@@ -7,20 +7,19 @@
         <span
           v-if="link.children && link.children.length > 0"
           @click="toggleCollapse(link)"
-          class="flex-shrink-0 w-4 h-4 flex items-center justify-center cursor-pointer mr-1" >
+          class="flex-shrink-0 w-4 h-4 flex items-center justify-center cursor-pointer mr-1"
+        >
           <span
             class="text-purple-700 text-sm font-medium transition-transform duration-200"
             :class="{ 'rotate-90': !isCollapsed(link) }"
           >
             ▶
           </span>
-        </span>
-
-        <a
+        </span>&nbsp;<a
           :href="link.to"
           class="block text-sm font-medium text-purple-700 hover:text-blue-500 py-0"
           :class="{
-            'ml-6': isLeafNode(link), // USING A NEW METHOD HERE (DEFINED IN SCRIPT)
+            'ml-6': isLeafNode(link),
             'flex-grow': link.children && link.children.length > 0
           }"
         >
