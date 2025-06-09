@@ -1,3 +1,4 @@
+<!-- /@src/components/navi/NaviTree.vue -->
 <template>
   <ul :class="ulClasses">
     <li v-for="link in links" :key="link.to || link.label" :class="liClasses">
@@ -53,25 +54,22 @@ const props = defineProps<{
   links: NavigationLink[];
   ulClasses?: string;
   liClasses?: string;
-  ulChildrenClasses?: string; // This prop itself needs to be passed down recursively
+  ulChildrenClasses?: string; // Passed down recursively
   depth?: number;
   initialExpansionLevel?: number;
 }>();
 
 const currentDepth = computed(() => props.depth ?? 0);
 
-// --- CONSOLE LOG FOR DEBUGGING (KEEP THIS FOR NOW) ---
-console.log(`NaviTree instance rendered:
-  Depth: ${currentDepth.value}
-  Links length: ${props.links.length}
-  ulClasses prop received: '${props.ulClasses}'
-  ulChildrenClasses prop received: '${props.ulChildrenClasses}'
-`);
-// --- END CONSOLE LOG ---
+// console.log(`NaviTree instance rendered:
+//   Depth: ${currentDepth.value}
+//   Links length: ${props.links.length}
+//   ulClasses prop received: '${props.ulClasses}'
+//   ulChildrenClasses prop received: '${props.ulChildrenClasses}'
+// `);
 
 const collapsedState = ref<{ [key: string]: boolean }>({});
 
-// NEW METHOD FOR ml-6 CONDITION: Checks if a node is a leaf (no children or empty children array)
 const isLeafNode = (link: NavigationLink): boolean => {
   return !link.children || link.children.length === 0;
 };
@@ -111,7 +109,6 @@ watch(
 );
 
 const isCollapsed = (link: NavigationLink): boolean => {
-  // If it's not a directory with actual children, it's not managed as collapsible.
   if (!link.to || !link.children || link.children.length === 0) return false;
   return !!collapsedState.value[link.to];
 };
@@ -122,7 +119,3 @@ const toggleCollapse = (link: NavigationLink) => {
   }
 };
 </script>
-
-<style scoped>
-/* Ensure no conflicting styles with Tailwind */
-</style>

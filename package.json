@@ -1,7 +1,7 @@
 {
     "name": "@annebrown.ca/vue3-fleet-pub",
     "description": "Fleet-Wide, Public, Vue 3 component Library",
-    "version": "0.0.11",
+    "version": "1.0.0",
     "private": false,
     "type": "module",
     "main": "./dist/vue3-fleet-pub.cjs",
@@ -22,6 +22,9 @@
     "repository": {
         "type": "git",
         "url": "git+https://github.com/annebrown/vue3-fleet-pub.git"
+    },
+    "bugs": {
+    "url": "https://github.com/your-org/vue3-fleet-pub/issues"
     },
     "keywords": [
         "vue",
@@ -49,5 +52,8 @@
         "@vue/tsconfig": "^0.7.0",
         "vite": "^5.0.11",
         "vite-plugin-dts": "^4.5.4"
+    },
+    "peerDependencies": {
+        "vue-router": "^4.5.1"
     }
 }

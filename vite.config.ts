@@ -1,4 +1,3 @@
-// /home/anne/devy/modules/vue3-fleet-pub/vite.config.ts
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { resolve } from 'path';
@@ -13,7 +12,6 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'Vue3FleetPub',
-      // THIS IS THE CRITICAL PART FOR FILENAMES
       fileName: (format) => {
         if (format === 'es') return 'vue3-fleet-pub.mjs'; // For ES Modules
         if (format === 'cjs') return 'vue3-fleet-pub.cjs'; // For CommonJS
@@ -22,9 +20,12 @@ export default defineConfig({
       },
     },
     rollupOptions: {
-      external: ['vue'],
+      external: ['vue', 'vue-router'],
       output: {
-        globals: { vue: 'Vue' },
+        globals:  {
+          vue: 'Vue' ,
+          'vue-router': 'VueRouter'
+        }
       },
     },
   },
