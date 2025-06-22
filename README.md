@@ -1,10 +1,16 @@
 ![Logo](./src/assets/images/logo.png)
 
-# @annebrown.ca/vue3-fleet-pub
+# @annebrown.ca/vue3-fleet-pub - DEPRECATED
 
 ![npm version](https://img.shields.io/npm/v/@annebrown.ca/vue3-fleet-pub.svg)
 ![npm downloads](https://img.shields.io/npm/dm/@annebrown.ca/vue3-fleet-pub.svg)
 ![License](https://img.shields.io/npm/l/@annebrown.ca/vue3-fleet-pub.svg)
+
+## DEPRECATED
+
+**This package has been renamed to [`nuxt3-fleet-pub`](https://www.npmjs.com/package/@annebrown.ca/nuxt3-fleet-pub).**
+
+Please use the new package instead.
 
 ## Description
 
@@ -16,10 +22,32 @@ Open-source, V3 Component Library
 
 `PagesNaviTree` sources `Nuxt3` components under `pages/` whose page meta must include `title` and `description`.
 
-## Installation
+## Setup
+
+### Install
 
 ```bash
 pnpm add @annebrown.ca/vue3-fleet-pub
+```
+
+### Configure
+
+Configure styles either in main CSS: 
+
+```css
+@import "@annebrown.ca/vue3-fleet-pub/dist/style.css";`
+```
+
+or `nuxt.config.ts`: 
+
+```ts
+export default defineNuxtConfig({
+  css: [
+    '~/assets/css/main.css', 
+    '@annebrown.ca/vue3-fleet-pub/dist/style.css'
+  ],
+  // ...
+});
 ```
 
 ## Usage

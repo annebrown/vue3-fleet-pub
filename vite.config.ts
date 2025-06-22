@@ -1,31 +1,32 @@
+// vue3-fleet-pub/vite.config.ts
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import { resolve } from 'path';
-import dts from 'vite-plugin-dts';
+// REMOVED: import tailwindcss from '@tailwindcss/vite'; // No longer needed here
 
 export default defineConfig({
   plugins: [
     vue(),
-    dts({ insertTypesEntry: true })
+    // REMOVED: tailwindcss(), // No longer needed here
   ],
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
+      entry: 'src/index.ts',
       name: 'Vue3FleetPub',
+      formats: ['es', 'cjs'],
       fileName: (format) => {
-        if (format === 'es') return 'vue3-fleet-pub.mjs'; // For ES Modules
-        if (format === 'cjs') return 'vue3-fleet-pub.cjs'; // For CommonJS
-        if (format === 'umd') return 'vue3-fleet-pub.umd.cjs'; // For UMD
-        return `vue3-fleet-pub.${format}.js`; // Fallback
+        if (format === 'es') return 'index.mjs';
+        if (format === 'cjs') return 'index.cjs';
+        return `index.${format}.js`;
       },
     },
     rollupOptions: {
-      external: ['vue', 'vue-router'],
-      output: {
-        globals:  {
-          vue: 'Vue' ,
-          'vue-router': 'VueRouter'
-        }
+      external: ['vue', 'vue-router', '@nuxt/content'], 
+        exports: 'named',
+        globals: {
+          vue: 'Vue',
+          'vue-router': 'VueRouter',
+          '@nuxt/content': 'NuxtContent', 
+        },
       },
     },
   },

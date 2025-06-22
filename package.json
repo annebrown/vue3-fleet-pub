@@ -1,30 +1,28 @@
 {
     "name": "@annebrown.ca/vue3-fleet-pub",
-    "description": "Fleet-Wide, Public, Vue 3 component Library",
-    "version": "1.0.0",
+    "version": "1.0.1",
+    "description": "Fleet-Wide, Open-Source, Vue 3 Component Library",
     "private": false,
     "type": "module",
     "main": "./dist/vue3-fleet-pub.cjs",
-    "module": "./dist/vue3-fleet-pub.mjs", 
-    "unpkg": "./dist/vue3-fleet-pub.umd.cjs", 
+    "module": "./dist/vue3-fleet-pub.mjs",
+    "unpkg": "./dist/vue3-fleet-pub.umd.cjs",
     "exports": {
         ".": {
-            "import": "./dist/vue3-fleet-pub.mjs",
-            "require": "./dist/vue3-fleet-pub.cjs",
-            "types": "./dist/index.d.ts"
-        },
-        "./dist/style.css": "./dist/style.css"
+        "import": "./dist/index.mjs",
+        "require": "./dist/index.cjs",
+        "types": "./dist/index.d.ts"
+        }
     },
-
     "files": [
-    "dist"
+        "dist"
     ],
     "repository": {
         "type": "git",
         "url": "git+https://github.com/annebrown/vue3-fleet-pub.git"
     },
     "bugs": {
-    "url": "https://github.com/your-org/vue3-fleet-pub/issues"
+        "url": "https://github.com/your-org/vue3-fleet-pub/issues"
     },
     "keywords": [
         "vue",
@@ -43,17 +41,18 @@
         "lint": "eslint . --ext .vue,.js,.jsx,.mjs,.ts,.tsx,.cjs --fix --ignore-path .gitignore",
         "format": "prettier --write src/"
     },
-    "dependencies": {
-        "vue": "^3.4.21"
-    },
-        "devDependencies": {
-        "@tsconfig/node22": "^22.0.2",
-        "@vitejs/plugin-vue": "^5.0.0",
-        "@vue/tsconfig": "^0.7.0",
+    "devDependencies": {
+        "vue": "^3.4.21",
         "vite": "^5.0.11",
+        "@vitejs/plugin-vue": "^5.0.0",
+        "typescript": "^5.8.3",
+        "@tsconfig/node22": "^22.0.2",
+        "@vue/tsconfig": "^0.7.0",
         "vite-plugin-dts": "^4.5.4"
     },
     "peerDependencies": {
-        "vue-router": "^4.5.1"
+        "vue": "^3.4.21",
+        "vue-router": "^4.0.0",
+        "@nuxt/content": "3.5.1"
     }
 }

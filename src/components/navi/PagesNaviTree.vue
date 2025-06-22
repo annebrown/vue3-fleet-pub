@@ -27,33 +27,28 @@ interface NavigationLink {
 }
 
 const props = defineProps<{
-  baseRoutePrefix?: string; // e.g., '/', '/admin', '/blog'
+  baseRoutePrefix?: string; 
   initialExpansionLevel?: number;
 }>();
 
 const router = useRouter();
 const pageNavigationLinks = ref<NavigationLink[]>([]);
 
-// --- Helper for building route-based tree ---
-// Parse Nuxt route records into hierarchical NavigationLink structure.
 const buildRouteNavigationTree = (
-  routes: ReturnType<typeof router.getRoutes>, // An array of Nuxt route records
+  routes: ReturnType<typeof router.getRoutes>, 
   basePrefix: string
 ): NavigationLink[] => {
   const treeMap = new Map<string, NavigationLink>();
   const rootNodes: NavigationLink[] = [];
-
-  // Normalize basePrefix to ensure consistent path handling
   const normalizedBasePrefix = basePrefix.endsWith('/') ? basePrefix.slice(0, -1) : basePrefix;
 
-  // First Pass: Create all individual nodes (pages and implicit directories)
+  // First Pass: Create all nodes
   routes.forEach(route => {
-    // Filter routes to only include those under the basePrefix
     if (!route.path.startsWith(normalizedBasePrefix)) {
       return;
     }
 
-    // Exclude dynamic segments for tree building labels (e.g., /users/:id -> /users)
+    // Exclude dynamic segments
     const cleanPath = route.path.split('/:')[0];
     // Exclude catch-all routes if missing title
     if (cleanPath.includes('...')) {
@@ -63,7 +58,6 @@ const buildRouteNavigationTree = (
     const label = route.meta?.title as string || cleanPath.split('/').pop() || 'Untitled Page';
     const isLeaf = !route.children || route.children.length === 0; 
 
-    // Create or update node for the current route's cleanPath
     let currentNode: NavigationLink;
     if (treeMap.has(cleanPath)) {
         currentNode = treeMap.get(cleanPath)!;
@@ -72,7 +66,7 @@ const buildRouteNavigationTree = (
             label: label,
             to: cleanPath,
             children: [],
-            collapsible: !isLeaf // Default to collapsible if not leaf
+            collapsible: !isLeaf 
         };
         treeMap.set(cleanPath, currentNode);
     }
@@ -88,42 +82,35 @@ const buildRouteNavigationTree = (
   });
 
 
-  // Second Pass: Assemble the hierarchy
+  // Second Pass: Assemble hierarchy
   treeMap.forEach(node => {
-    const fullPath = node.to || node.label; // Use 'to' for path, fallback to label
+    const fullPath = node.to || node.label; 
 
     const lastSlashIndex = fullPath.lastIndexOf('/');
     const parentPath = lastSlashIndex > 0 ? fullPath.substring(0, lastSlashIndex) : '';
 
     if (parentPath === normalizedBasePrefix) {
-      // This is a direct child of the base prefix (e.g., /docs/arch for /docs)
+      // Child of apex
       rootNodes.push(node);
     } else if (treeMap.has(parentPath)) {
-      // This node has a parent in our map, add it as a child
       const parentNode = treeMap.get(parentPath)!;
       parentNode.children = parentNode.children || [];
-      if (!parentNode.children.some(child => child.to === node.to)) { // Avoid duplicates
+      if (!parentNode.children.some(child => child.to === node.to)) { // Avoid dups
         parentNode.children.push(node);
       }
-      parentNode.collapsible = true; // Mark parent as collapsible
+      parentNode.collapsible = true; 
     } else if (fullPath === normalizedBasePrefix && normalizedBasePrefix !== '/') {
-        // Handle the basePrefix route itself if it's not the absolute root '/'
-        // This node defines the starting point of the tree. It will be filtered later if not needed.
         rootNodes.push(node);
     } else if (normalizedBasePrefix === '/' && parentPath === '') {
-        // For the absolute root path, direct children without explicit parent are top-level.
         rootNodes.push(node);
     }
   });
 
-  // Filter out the basePrefix node itself if it was added as a root node,
-  // unless basePrefix is '/' and you want to show all top-level pages.
   const finalRootNodes = rootNodes.filter(node => {
-      // Keep nodes that are not the basePrefix itself (unless basePrefix is '/' and it's a top-level page)
       return node.to !== normalizedBasePrefix || normalizedBasePrefix === '/';
   });
 
-  // Sort the final tree (directories first, then files alphabetically)
+  // Sort dirs first
   const sortNodes = (nodes: NavigationLink[]) => {
     nodes.sort((a, b) => {
       const isADir = a.children && a.children.length > 0;
@@ -144,27 +131,17 @@ const buildRouteNavigationTree = (
 };
 
 
-// --- Fetching and Building Navigation ---
 const buildPageNavigation = async () => {
-  const allRoutes = router.getRoutes(); // Get all route records
+  const allRoutes = router.getRoutes(); 
   
   const filteredRoutes = allRoutes.filter(route => {
-    // Filter out routes that are not pages (e.g., named routes for modals, etc.)
-    // and those that don't have meta.title or path.
-    // Ensure route.path starts with the baseRoutePrefix.
     return route.meta?.title && route.path.startsWith(props.baseRoutePrefix || '/');
   });
 
-  // Build the hierarchical navigation tree from the filtered routes
   pageNavigationLinks.value = buildRouteNavigationTree(filteredRoutes, props.baseRoutePrefix || '/');
 };
 
 onMounted(buildPageNavigation);
-// Watch for changes in baseRoutePrefix or routes (if dynamic routes are added/removed)
 watch(() => props.baseRoutePrefix, buildPageNavigation);
-watch(() => router.getRoutes().length, buildPageNavigation); // Simple watch for route changes
+watch(() => router.getRoutes().length, buildPageNavigation); /
 </script>
-
-<style scoped>
-/* Add any PagesNaviTree specific styles here if needed */
-</style>

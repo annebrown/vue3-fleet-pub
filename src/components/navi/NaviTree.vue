@@ -1,6 +1,6 @@
 <!-- /@src/components/navi/NaviTree.vue -->
 <template>
-  <ul :class="ulClasses">
+  <ul :class="[ulClasses, currentDepth > 0 ? '!ml-4' : '']"> 
     <li v-for="link in links" :key="link.to || link.label" :class="liClasses">
       <div
         class="flex items-center space-x-2 mt-0 py-0"
@@ -14,13 +14,14 @@
             class="text-purple-700 text-sm font-medium transition-transform duration-200"
             :class="{ 'rotate-90': !isCollapsed(link) }"
           >
-            ▶
+            <!-- RE-INSERTED YOUR SVG ICON HERE -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5l7 7l-7 7"/></svg>
           </span>
         </span>&nbsp;<a
           :href="link.to"
           class="block text-sm font-medium text-purple-700 hover:text-blue-500 py-0"
           :class="{
-            'ml-6': isLeafNode(link),
+            'ml-6': isLeafNode(link), // Keep ml-6 for leaf nodes for icon spacing
             'flex-grow': link.children && link.children.length > 0
           }"
         >
@@ -31,7 +32,8 @@
       <nav v-if="link.children && link.children.length > 0 && !isCollapsed(link)" class="mt-0">
         <NaviTree
           :links="link.children"
-          :ulClasses="props.ulChildrenClasses"       :liClasses="liClasses"
+          :ulClasses="props.ulChildrenClasses" 
+          :liClasses="liClasses"
           :depth="currentDepth + 1"
           :initialExpansionLevel="initialExpansionLevel"
           :ulChildrenClasses="props.ulChildrenClasses" />
@@ -54,19 +56,12 @@ const props = defineProps<{
   links: NavigationLink[];
   ulClasses?: string;
   liClasses?: string;
-  ulChildrenClasses?: string; // Passed down recursively
+  ulChildrenClasses?: string; 
   depth?: number;
   initialExpansionLevel?: number;
 }>();
 
 const currentDepth = computed(() => props.depth ?? 0);
-
-// console.log(`NaviTree instance rendered:
-//   Depth: ${currentDepth.value}
-//   Links length: ${props.links.length}
-//   ulClasses prop received: '${props.ulClasses}'
-//   ulChildrenClasses prop received: '${props.ulChildrenClasses}'
-// `);
 
 const collapsedState = ref<{ [key: string]: boolean }>({});
 
